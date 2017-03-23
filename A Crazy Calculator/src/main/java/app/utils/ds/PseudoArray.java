@@ -6,9 +6,9 @@ public class PseudoArray
 	
 	public PseudoArray(int size)
 	{
-		list = new LinkedList();
+		this.list = new LinkedList();
 		while (size > 0) {
-			list.pushBack("");
+			this.list.pushBack("");
 			
 			size--;
 		}
@@ -16,16 +16,21 @@ public class PseudoArray
 	
 	public void set(String data, int index)
 	{
-		list.set(data, index);
+		this.list.set(data, index);
 	}
 	
 	public String get(int index)
 	{
-		return list.get(index);
+		return this.list.get(index);
 	}
 	
 	public int getSize()
 	{
-		return list.getCount();
+		return this.list.getCount();
+	}
+	
+	public LinkedList getDS()
+	{
+		return this.list;
 	}
 }
