@@ -13,11 +13,7 @@ public class LinkedListTest
 		list.pushBack("2");
 		list.pushBack("3");
 		
-		assertEquals(
-			"List must have 3 nodes inside",
-			3,
-			list.getCount()
-		);
+		assertEquals("List must have 3 nodes inside", 3, list.getCount());
 		
 		try {
 			list.insert("-", 1);
