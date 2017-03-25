@@ -56,16 +56,11 @@ public class Queue
 		this.rearIndex = -1;
 	}
 	
-	public PseudoArray getDS()
-	{
-		return this.elements;
-	}
-	
 	private void extendList(int size)
 	{
 		int newSize = this.elements.getSize() + size;
 		PseudoArray tmpArray = new PseudoArray(newSize);
-		for (int ctr = 0; ctr < size; ctr++) {
+		for (int ctr = 0; ctr < this.elements.getSize(); ctr++) {
 			tmpArray.set(this.elements.get(ctr), ctr);
 		}
 		
