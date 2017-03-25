@@ -37,8 +37,12 @@ public class StackTest
         }
 
         Object[] stackContent = stack.getContents();
-        for (Object content : stackContent) {
-            System.out.println(content);
+        for (int i = 0; i < 5; i++) {
+            assertEquals(
+                "Current top of the stack must be '" + (i + 1) + "'.",
+                Integer.toString(i + 1),
+                stackContent[i]
+            );
         }
     }
 }
