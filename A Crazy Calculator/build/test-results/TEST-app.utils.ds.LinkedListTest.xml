@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="app.utils.ds.LinkedListTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2017-03-23T04:13:13" hostname="Enrico" time="0.005">
-  <properties/>
-  <testcase name="threeNodeTest" classname="app.utils.ds.LinkedListTest" time="0.004"/>
-  <testcase name="emptyListExceptionsTest" classname="app.utils.ds.LinkedListTest" time="0.001"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>
