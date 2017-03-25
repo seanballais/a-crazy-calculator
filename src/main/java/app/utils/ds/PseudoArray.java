@@ -28,9 +28,4 @@ public class PseudoArray
 	{
 		return this.list.getCount();
 	}
-	
-	public LinkedList getDS()
-	{
-		return this.list;
-	}
 }

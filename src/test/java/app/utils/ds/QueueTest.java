@@ -7,7 +7,7 @@ public class QueueTest
 {
 	@Test public void queueTest()
 	{
-		Queue q1 = new Queue(5);
+		Queue q1 = new Queue(1);
 		
 		assertTrue(q1.isEmpty());
 		
