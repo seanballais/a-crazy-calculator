@@ -55,6 +55,11 @@ public class Queue
 		this.frontIndex = 0;
 		this.rearIndex = -1;
 	}
+
+	public PseudoArray getDS()
+    {
+        return this.elements;
+    }
 	
 	private void extendList(int size)
 	{

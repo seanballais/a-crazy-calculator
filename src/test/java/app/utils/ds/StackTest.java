@@ -1,6 +1,9 @@
 package app.utils.ds;
 
 import org.junit.*;
+
+import java.util.HashMap;
+
 import static org.junit.Assert.*;
 
 public class StackTest
@@ -23,7 +26,6 @@ public class StackTest
         try {
             stack.pop();
             stack.peek();
-            stack.getContents();
             fail("Stack should throw an exception because it is empty.");
         } catch (IllegalStateException istex) {
             assertEquals(
@@ -32,17 +34,28 @@ public class StackTest
                 istex.getMessage());
         }
 
-        for (int ctr = 0; ctr < 5;) {
+        for (int ctr = 0; ctr < 10;) {
             stack.push(Integer.toString(++ctr));
         }
 
-        Object[] stackContent = stack.getContents();
-        for (int i = 0; i < 5; i++) {
-            assertEquals(
-                "Current top of the stack must be '" + (i + 1) + "'.",
-                Integer.toString(i + 1),
-                stackContent[i]
-            );
+        HashMap<String, Object[]> contents = stack.getDSContents();
+        String[] contentKeys = { "stack", "queue1", "queue2", "pseudoarray1", "pseudoarray2", "linkedlist1", "linkedlist2" };
+        String[] expectedValues = { "1", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" };
+        for (String key : contentKeys) {
+            Object[] content = contents.get(key);
+            for (int i = 0; i < content.length; i++) {
+                String expected = "";
+                if (key.equals("stack") || key.equals("queue1") || key.equals("queue2")) {
+                    expected = expectedValues[i + 1];
+                } else {
+                    expected = expectedValues[i];
+                }
+                assertEquals(
+                    "The " + key + " content of index '" + i + "' must be " + expected,
+                    expected,
+                    content[i]
+                );
+            }
         }
     }
 }
