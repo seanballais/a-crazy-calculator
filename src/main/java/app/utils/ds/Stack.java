@@ -1,7 +1,7 @@
 package app.utils.ds;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashMap;
 
 public class Stack
 {
@@ -62,10 +62,24 @@ public class Stack
         return q1.isEmpty() && q2.isEmpty();
     }
 
-    public Object[] getContents() throws IllegalStateException
+    public HashMap<String, Object[]> getDSContents()
+    {
+        HashMap<String, Object[]> contents = new HashMap<>();
+        contents.put("stack", this.getStackContents());
+        contents.put("queue1", this.getQueueContents(this.q1));
+        contents.put("queue2", this.getQueueContents(this.q2));
+        contents.put("pseudoarray1", this.getArrayContents(this.q1.getDS()));
+        contents.put("pseudoarray2", this.getArrayContents(this.q2.getDS()));
+        contents.put("linkedlist1", this.getListContents(this.q1.getDS().getDS()));
+        contents.put("linkedlist2", this.getListContents(this.q2.getDS().getDS()));
+
+        return contents;
+    }
+
+    private Object[] getStackContents()
     {
         if (this.isEmpty()) {
-            throw new IllegalStateException("Stack is empty.");
+            return new Object[] {};
         }
 
         ArrayList<String> contents = new ArrayList<>();
@@ -77,6 +91,64 @@ public class Stack
 
         this.switchActiveQueue();
         return contents.toArray();
+    }
+
+    private Object[] getQueueContents(Queue q)
+    {
+        Queue tmpQ = this.deepCopyQueue(q);
+
+        if (tmpQ.isEmpty()) {
+            return new Object[] {};
+        }
+
+        ArrayList<String> contents = new ArrayList<>();
+        while (!tmpQ.isEmpty()) {
+            contents.add(tmpQ.dequeue());
+        }
+
+        return contents.toArray();
+    }
+
+    private Object[] getArrayContents(PseudoArray array)
+    {
+        if (array.getSize() == 0) {
+            return new Object[] {};
+        }
+
+        ArrayList<String> contents = new ArrayList<>();
+        for (int i = 0; i < array.getSize();) {
+            contents.add(array.get(i++));
+        }
+
+        return contents.toArray();
+    }
+
+    private Object[] getListContents(LinkedList list)
+    {
+        if (list.getCount() == 0) {
+            return new Object[] {};
+        }
+
+        ArrayList<String> contents = new ArrayList<>();
+        for (int i = 0; i < list.getCount();) {
+            contents.add(list.get(i++));
+        }
+
+        return contents.toArray();
+    }
+
+    private Queue deepCopyQueue(Queue q)
+    {
+        Queue tmpQ = new Queue(5);
+        Queue dropQ = new Queue(5);
+        while (!q.isEmpty()) {
+            String data = q.dequeue();
+            tmpQ.enqueue(data);
+            dropQ.enqueue(data);
+        }
+
+        q = dropQ;
+        return tmpQ;
     }
 
     private Queue getActiveQueue()
