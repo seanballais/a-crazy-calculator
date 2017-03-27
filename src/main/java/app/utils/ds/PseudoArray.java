@@ -6,6 +6,10 @@ public class PseudoArray
 	
 	public PseudoArray(int size)
 	{
+		if (size <= 0) {
+		    size = 1; // Default to 1.
+        }
+
 		this.list = new LinkedList();
 		while (size > 0) {
 			this.list.pushBack("");
@@ -28,4 +32,9 @@ public class PseudoArray
 	{
 		return this.list.getCount();
 	}
+
+	public LinkedList getDS()
+    {
+        return this.list;
+    }
 }

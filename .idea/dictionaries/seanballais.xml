@@ -2,6 +2,8 @@
   <dictionary name="seanballais">
     <words>
       <w>istex</w>
+      <w>linkedlist</w>
+      <w>pseudoarray</w>
     </words>
   </dictionary>
 </component>
