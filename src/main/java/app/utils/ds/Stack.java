@@ -59,7 +59,7 @@ public class Stack
 
     public boolean isEmpty()
     {
-        return q1.isEmpty() && q2.isEmpty();
+        return this.activeQueue.isEmpty();
     }
 
     public HashMap<String, Object[]> getDSContents()
@@ -96,6 +96,8 @@ public class Stack
     private Object[] getQueueContents(Queue q)
     {
         Queue tmpQ = this.deepCopyQueue(q);
+
+        // I think we forgot to add back the contents of q.
 
         if (tmpQ.isEmpty()) {
             return new Object[] {};
@@ -147,7 +149,10 @@ public class Stack
             dropQ.enqueue(data);
         }
 
-        q = dropQ;
+        while (!dropQ.isEmpty()) {
+            q.enqueue(dropQ.dequeue());
+        }
+
         return tmpQ;
     }
 

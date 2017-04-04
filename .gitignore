@@ -6,3 +6,5 @@ build/
 .idea/tasks.xml
 .idea/libraries/*.xml
 /.idea/workspace.xml
+
+\.idea/dictionaries/

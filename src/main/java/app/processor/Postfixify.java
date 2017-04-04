@@ -1,26 +1,94 @@
 package app.processor;
 
+import app.utils.Utility;
 import app.utils.ds.Stack;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 
 public class Postfixify
 {
-    private int parseErrorOffset;
+    private Evaluator evaluator;
     private Stack stack;
 
-    public Object[] postFixify(String input) throws ParseException
+    public Postfixify(Evaluator evaluator)
+    {
+        this.evaluator = evaluator;
+    }
+
+    public String[] postFixify(String input) throws ParseException
     {
         ArrayList<String> postFix = new ArrayList<>();
+        Object[] parsed;
         try {
-            Object[] parsed = parseExpression(input);
+            parsed = this.parseExpression(input);
         } catch (ParseException pex) {
             throw pex;
         }
 
-        return postFix.toArray();
+        this.stack = new Stack(parsed.length);
+        String[] parsedSymbols = Arrays.copyOf(parsed, parsed.length, String[].class);
+
+        // Convert the expression to postfix.
+        for (String symbol : parsedSymbols) {
+            this.evaluateSymbol(symbol, postFix);
+        }
+
+        while (!this.stack.isEmpty()) {
+            postFix.add(this.stack.pop());
+            this.evaluator.notify(this.stack.getDSContents());
+        }
+
+        return Arrays.copyOf(postFix.toArray(), postFix.size(), String[].class);
+    }
+
+    public Stack getStack()
+    {
+        return this.stack;
+    }
+
+    private int getPrecedence(char operator)
+    {
+        if (operator == '*' || operator == '/') {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    private void evaluateSymbol(String symbol, ArrayList<String> postFix)
+    {
+        if (Utility.isNumeric(symbol)) {
+            postFix.add(symbol);
+        } else if (symbol.equals("(")) {
+            this.stack.push(symbol);
+            this.evaluator.notify(this.stack.getDSContents());
+        } else if (symbol.equals(")")) {
+            while (!this.stack.peek().equals("(")) {
+                postFix.add(this.stack.pop());
+                this.evaluator.notify(this.stack.getDSContents());
+            }
+
+            this.stack.pop(); // Discard the '('.
+            this.evaluator.notify(this.stack.getDSContents());
+        } else if (this.stack.isEmpty() || this.stack.peek().equals("(")) {
+            this.stack.push(symbol);
+            this.evaluator.notify(this.stack.getDSContents());
+        } else if (this.getPrecedence(symbol.charAt(0)) > this.getPrecedence(this.stack.peek().charAt(0))) {
+            this.stack.push(symbol);
+            this.evaluator.notify(this.stack.getDSContents());
+        } else if (this.getPrecedence(symbol.charAt(0)) == this.getPrecedence(this.stack.peek().charAt(0))) {
+            postFix.add(this.stack.pop());
+            this.evaluator.notify(this.stack.getDSContents());
+            this.stack.push(symbol);
+            this.evaluator.notify(this.stack.getDSContents());
+        } else if (this.getPrecedence(symbol.charAt(0)) < this.getPrecedence(this.stack.peek().charAt(0))) {
+            postFix.add(this.stack.pop());
+            this.evaluator.notify(this.stack.getDSContents());
+            this.evaluateSymbol(symbol, postFix);
+        }
     }
 
     private Object[] parseExpression(String expression) throws ParseException
@@ -31,9 +99,10 @@ public class Postfixify
         operators.add('*');
         operators.add('/');
 
-        expression = insertMultiplication(expression, operators);
-        if (!this.isValid(expression, operators)) {
-            throw new ParseException("Invalid expression", this.parseErrorOffset);
+        expression = Utility.insertMultiplication(Utility.stripWhitespace(expression), operators);
+        StringValidator.resetParseOffset();
+        if (!StringValidator.isValid(expression, operators)) {
+            throw new ParseException("Invalid expression", StringValidator.getParseErrorOffset());
         }
 
         return this.explode(expression, operators);
@@ -46,15 +115,18 @@ public class Postfixify
         updatedOperators.add('(');
         updatedOperators.add(')');
 
-        StringBuilder digit = new StringBuilder();
+        StringBuilder digits = new StringBuilder();
         int charCtr = 0;
         for (char c : expression.toCharArray()) {
             if (Character.isDigit(c)) {
-                digit.append(c);
+                digits.append(c);
             } else if (updatedOperators.contains(c)) {
-                symbols.add(digit.toString());
+                if (digits.length() > 0) {
+                    symbols.add(digits.toString());
+                }
+
                 symbols.add(Character.toString(c));
-                digit.setLength(0);
+                digits.setLength(0);
             } else {
                 throw new ParseException("Invalid expression.", charCtr);
             }
@@ -62,99 +134,10 @@ public class Postfixify
             charCtr++;
         }
 
+        if (digits.length() > 0) {
+            symbols.add(digits.toString());
+        }
+
         return symbols.toArray();
-    }
-
-    private String insertMultiplication(String expression, HashSet<Character> operators)
-    {
-        StringBuilder newExpression = new StringBuilder();
-        for (char c : expression.toCharArray()) {
-            if ((c == '(' && operators.contains(newExpression.charAt(newExpression.length() - 1))) ||
-                    (Character.isDigit(c) && newExpression.charAt(newExpression.length() - 1) == ')')) {
-                newExpression.append("*");
-                newExpression.append(Character.toString(c));
-            } else {
-                newExpression.append(Character.toString(c));
-            }
-        }
-
-        return newExpression.toString();
-    }
-
-    private boolean isValid(String expression, HashSet<Character> operators)
-    {
-        return this.validateCharacters(expression, operators) && this.validateOperators(expression, operators);
-    }
-
-    private boolean validateOperators(String expression, HashSet<Character> operators)
-    {
-        if (operators.contains(expression.charAt(0))) {
-            this.parseErrorOffset = 0;
-            return false;
-        } else if (operators.contains(expression.charAt(expression.length() - 1))) {
-            this.parseErrorOffset = expression.length() - 1;
-            return false;
-        }
-
-        int parenthesisCtr = 0;
-        char prevOperator = '\0';
-        StringBuilder subexpression = new StringBuilder();
-        boolean addSubexpression = false;
-
-        int currChar = 0;
-        for (char c : expression.toCharArray()) {
-            if (addSubexpression) {
-                if (c == '(') {
-                    parenthesisCtr++;
-                } else if (c == ')') {
-                    parenthesisCtr--;
-                    if (parenthesisCtr == 0) {
-                        // We found the end of the expression inside the parentheses.
-                        if (!this.validateOperators(subexpression.toString(), operators)) {
-                            this.parseErrorOffset += currChar;
-                            return false;
-                        }
-                        subexpression.setLength(0);
-                        prevOperator = '\0';
-                        addSubexpression = false;
-                    }
-                }
-
-                subexpression.append(c);
-            } else {
-                if (c == '(') {
-                    addSubexpression = true;
-                } else if (operators.contains(c)) {
-                    if (!operators.contains(prevOperator)) {
-                        prevOperator = c;
-                    } else if (operators.contains(prevOperator)) {
-                        this.parseErrorOffset = currChar;
-                        return false;
-                    }
-                } else if (Character.isDigit(c)) {
-                    prevOperator = '\0';
-                }
-            }
-
-            currChar++;
-        }
-
-        if (parenthesisCtr != 0) {
-            this.parseErrorOffset = currChar;
-            return false;
-        }
-
-        return true;
-    }
-
-    private boolean validateCharacters(String expression, HashSet<Character> operators)
-    {
-        for (char c : expression.toCharArray()) {
-            if (!Character.isDigit(c) && (!operators.contains(c) && c != '(' && c != ')')) {
-                return false;
-            }
-        }
-
-        return true;
     }
 }
