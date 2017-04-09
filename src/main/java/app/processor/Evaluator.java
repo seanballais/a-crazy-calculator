@@ -24,6 +24,7 @@ public class Evaluator
         this.stack = postfixify.getStack();
         this.observers = new ArrayList<>();
         this.operators = new HashSet<>();
+        this.expression = "";
         operators.add('+');
         operators.add('-');
         operators.add('*');
@@ -45,13 +46,15 @@ public class Evaluator
     {
         if (this.expression.equals("")) {
             this.alertError("Expression not specified.");
+            return "";
         }
 
-        String[] postFix = new String[1];
+        String[] postFix;
         try {
             postFix = postfixify.postFixify(this.expression);
         } catch (ParseException pex) {
             this.alertError(pex.getMessage());
+            return "";
         }
 
         this.postFixExpression = this.unifyArray(postFix);
@@ -80,7 +83,8 @@ public class Evaluator
 
         String result = this.stack.pop();
         String[] explodedNumber = result.split("\\.");
-        if (this.hasNonZeros(explodedNumber[1])) {
+
+        if (explodedNumber.length > 1 && this.hasNonZeros(explodedNumber[1])) {
             return result;
         } else {
             return explodedNumber[0];

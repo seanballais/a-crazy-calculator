@@ -1,21 +1,32 @@
 package app;
 
+import app.gui.GUI;
 import app.processor.Evaluator;
+import app.processor.StringValidator;
 import app.utils.patterns.Observer;
 
+import javax.swing.*;
 import java.util.HashMap;
-import java.util.Scanner;
 
 public class App extends Observer
 {
     private Evaluator evaluator;
+    private GUI gui;
+    private boolean isExpressionValid;
 
     public App()
     {
         super();
 
         this.evaluator = new Evaluator();
+        this.gui = new GUI(this);
         this.evaluator.registerObserver(this);
+        this.isExpressionValid = true;
+    }
+
+    public GUI getGUI()
+    {
+        return this.gui;
     }
 
     public void update(HashMap<String, Object[]> stackContents)
@@ -39,13 +50,17 @@ public class App extends Observer
 
     public void alertParseError(String error)
     {
-        System.out.println(error);
-        System.exit(-1);
+        this.isExpressionValid = false;
+        JOptionPane.showMessageDialog(this.gui, error, "Calculator Error", JOptionPane.ERROR_MESSAGE);
     }
 
-    public Evaluator getEvaluator()
+    public void startComputing(String expression)
     {
-        return this.evaluator;
+        this.evaluator.setExpression(expression);
+
+        if (this.isExpressionValid) {
+            this.gui.setOutputField(this.evaluator.compute());
+        }
     }
 
     private void printObjects(Object[] contents)
@@ -64,18 +79,8 @@ public class App extends Observer
     public static void main(String[] args)
     {
         App app = new App();
-
-        Scanner scan = new Scanner(System.in);
-
-        System.out.print("Expression: ");
-
-        app.getEvaluator().setExpression(scan.nextLine());
-
-        System.out.println("\nData Structure Contents");
-
-        String value = app.getEvaluator().compute();
-        System.out.println("Postfix String: " + app.getEvaluator().getPostFixExpression());
-        System.out.println("\n-----");
-        System.out.println("Computed Value: " + value);
+        app.getGUI().setVisible(true);
+        app.getGUI().setSize(500,400);
+        app.getGUI().setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 }
