@@ -77,53 +77,8 @@ public class GUI extends JFrame implements ActionListener {
 		offButton.setOpaque(true);
 		offButton.setHorizontalAlignment(SwingConstants.CENTER);
         offButton.addActionListener(this);
-		
-		outputField = new JTextArea();
-		outputField.setLayout(new FlowLayout());
-		//outputField.setHorizontalAlignment(JTextArea.RIGHT);
-		outputField.setPreferredSize(new Dimension(251,105));
-		//outputField.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-		outputField.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
-		//outputField.setAlignmentX(JTextArea.RIGHT_ALIGNMENT);
-		outputField.setOpaque(false);
-		outputField.setBackground(new Color(0,0,0,0));
-		outputField.setEditable(false);
-		outputField.setFont(font);
-		outPanel = new JPanel();
-		outPanel.setPreferredSize(new Dimension(50,100));
-		//outPanel.setBackground(Color.BLACK);
-		outPanel.add(outputField);
-
-		mainPanel = new JPanel();
-		mainPanel.setLayout(new BorderLayout());
-		mainPanel.add(outPanel, BorderLayout.NORTH);
-		
-		numPanel = new JPanel();
-		numPanel.setLayout(new GridLayout(5,3));
-		numPanel.setBackground(Color.BLACK);
-		//numPanel.setBorder(BorderFactory.createLineBorder(Color.black));
-		
-		numPanel.add(clearButton);
-		numPanel.add(deleteButton);
-		numPanel.add(offButton);
-		numPanel.add(numberButtons[7]);
-		numPanel.add(numberButtons[8]);
-		numPanel.add(numberButtons[9]);
-		numPanel.add(numberButtons[4]);
-		numPanel.add(numberButtons[5]);
-		numPanel.add(numberButtons[6]);
-		numPanel.add(numberButtons[1]);
-		numPanel.add(numberButtons[2]);
-		numPanel.add(numberButtons[3]);
-		numPanel.add(numberButtons[0]);
-		mainPanel.add(numPanel);
-		
-		numPanel.add(numberButtons[10]);
-		mainPanel.add(numPanel);
-		numPanel.add(numberButtons[11]);
-		mainPanel.add(numPanel);
-		
-		plusButton = new JButton("+");
+        
+        plusButton = new JButton("+");
 		plusButton.setHorizontalAlignment(SwingConstants.CENTER);
         plusButton.addActionListener(this);
 		plusButton.setForeground(Color.WHITE);
@@ -148,16 +103,64 @@ public class GUI extends JFrame implements ActionListener {
         equalsButton.addActionListener(this);
 		equalsButton.setForeground(Color.WHITE);
 		equalsButton.setBackground(Color.BLACK);
-		operationPanel = new JPanel();
+		
+		outputField = new JTextArea();
+		outputField.setLayout(new FlowLayout());
+		//outputField.setHorizontalAlignment(JTextField.RIGHT);
+		outputField.setPreferredSize(new Dimension(251,105));
+		//outputField.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		outputField.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+		outputField.setOpaque(false);
+		outputField.setBackground(new Color(0,0,0,0));
+		outputField.setEditable(false);
+		outputField.setFont(font);
+		outPanel = new JPanel();
+		outPanel.setPreferredSize(new Dimension(50,100));
+		//outPanel.setBackground(Color.BLACK);
+		outPanel.add(outputField);
+
+		mainPanel = new JPanel();
+		mainPanel.setLayout(new BorderLayout());
+		mainPanel.add(outPanel, BorderLayout.NORTH);
+		
+		numPanel = new JPanel();
+		numPanel.setLayout(new GridLayout(5,4));
+		numPanel.setBackground(Color.BLACK);
+		//numPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+		
+		numPanel.add(clearButton);
+		numPanel.add(deleteButton);
+		numPanel.add(offButton);
+		numPanel.add(divideButton);
+		numPanel.add(numberButtons[7]);
+		numPanel.add(numberButtons[8]);
+		numPanel.add(numberButtons[9]);
+		numPanel.add(multiplyButton);
+		numPanel.add(numberButtons[4]);
+		numPanel.add(numberButtons[5]);
+		numPanel.add(numberButtons[6]);
+		numPanel.add(minusButton);
+		numPanel.add(numberButtons[1]);
+		numPanel.add(numberButtons[2]);
+		numPanel.add(numberButtons[3]);
+		numPanel.add(plusButton);
+		numPanel.add(numberButtons[0]);
+		numPanel.add(numberButtons[10]);
+		numPanel.add(numberButtons[11]);
+		numPanel.add(equalsButton);
+		mainPanel.add(numPanel);
+		
+		
+		/*operationPanel = new JPanel();
 		operationPanel.setLayout(new GridLayout (5,1));
 		operationPanel.add(plusButton);
 		operationPanel.add(minusButton);
 		operationPanel.add(multiplyButton);
 		operationPanel.add(divideButton);
 		operationPanel.add(equalsButton);
-		//mainPanel.add(operationPanel, BorderLayout.EAST);
+		mainPanel.add(operationPanel, BorderLayout.EAST);*/
 		
-		add(operationPanel, BorderLayout.EAST);
+		//add(operationPanel, BorderLayout.EAST);
 		add(mainPanel, BorderLayout.CENTER);
 	}
 
