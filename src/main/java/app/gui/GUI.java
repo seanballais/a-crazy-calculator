@@ -17,7 +17,7 @@ public class GUI extends JFrame implements ActionListener {
 	private JButton deleteButton;
 	private JButton offButton;
 
-	private JTextField outputField;
+	private JTextArea outputField;
 
 	private JButton[] numberButtons;
 
@@ -34,55 +34,62 @@ public class GUI extends JFrame implements ActionListener {
 		numberButtons= new JButton[12];
 		setLayout(new BorderLayout());
 		//mainPanel.setLayout(new BorderLayout());
-
+		Font font = new Font("Verdana", Font.BOLD, 14);
+		
 		for(int i=9; i>=0;i--){
 			numberButtons[i] = new JButton(Integer.toString(i));
 			numberButtons[i].setPreferredSize(new Dimension(40,40));
 			numberButtons[i].setHorizontalAlignment(SwingConstants.CENTER);
 			numberButtons[i].setForeground(Color.WHITE);
-			numberButtons[i].setBackground(Color.BLUE);
+			numberButtons[i].setBackground(Color.BLACK);
 			numberButtons[i].setOpaque(true);
 			numberButtons[i].addActionListener(this);
 		}
 		numberButtons[10] = new JButton("(");
 		numberButtons[10].setHorizontalAlignment(SwingConstants.CENTER);
 		numberButtons[10].setForeground(Color.WHITE);
-		numberButtons[10].setBackground(Color.BLUE);
+		numberButtons[10].setBackground(Color.BLACK);
 		numberButtons[10].setOpaque(true);
         numberButtons[10].addActionListener(this);
 	
 		numberButtons[11] = new JButton(")");
 		numberButtons[11].setHorizontalAlignment(SwingConstants.CENTER);
 		numberButtons[11].setForeground(Color.WHITE);
-		numberButtons[11].setBackground(Color.BLUE);
+		numberButtons[11].setBackground(Color.BLACK);
 		numberButtons[11].setOpaque(true);
         numberButtons[11].addActionListener(this);
 		
 		clearButton = new JButton("AC");
 		clearButton.setForeground(Color.WHITE);
-		clearButton.setBackground(Color.BLUE);
+		clearButton.setBackground(Color.BLACK);
 		clearButton.setOpaque(true);
 		clearButton.setHorizontalAlignment(SwingConstants.CENTER);
         clearButton.addActionListener(this);
 		deleteButton = new JButton("DEL");
 		deleteButton.setForeground(Color.WHITE);
-		deleteButton.setBackground(Color.BLUE);
+		deleteButton.setBackground(Color.BLACK);
 		deleteButton.setOpaque(true);
 		deleteButton.setHorizontalAlignment(SwingConstants.CENTER);
         deleteButton.addActionListener(this);
 		offButton = new JButton("OFF");
 		offButton.setForeground(Color.WHITE);
-		offButton.setBackground(Color.BLUE);
+		offButton.setBackground(Color.BLACK);
 		offButton.setOpaque(true);
 		offButton.setHorizontalAlignment(SwingConstants.CENTER);
         offButton.addActionListener(this);
 		
-		outputField = new JTextField(20);
+		outputField = new JTextArea();
 		outputField.setLayout(new FlowLayout());
-		outputField.setHorizontalAlignment(JTextField.RIGHT);
-		//outputField.setPreferredSize(new Dimension(160,20));
+		//outputField.setHorizontalAlignment(JTextField.RIGHT);
+		outputField.setPreferredSize(new Dimension(251,105));
+		outputField.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		outputField.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+		outputField.setOpaque(false);
+		outputField.setBackground(new Color(0,0,0,0));
+		outputField.setEditable(false);
+		outputField.setFont(font);
 		outPanel = new JPanel();
-		outPanel.setPreferredSize(new Dimension(500,20));
+		outPanel.setPreferredSize(new Dimension(50,100));
 		//outPanel.setBackground(Color.BLACK);
 		outPanel.add(outputField);
 
@@ -117,29 +124,34 @@ public class GUI extends JFrame implements ActionListener {
 		
 		plusButton = new JButton("+");
 		plusButton.setHorizontalAlignment(SwingConstants.CENTER);
+		plusButton.setBorder(null);
+	    plusButton.setBorderPainted(false);
+	    plusButton.setContentAreaFilled(false);
+	    plusButton.setOpaque(false);
+	    
         plusButton.addActionListener(this);
 		//plusButton.setForeground(Color.WHITE);
-		//plusButton.setBackground(Color.BLUE);
+		//plusButton.setBackground(Color.BLACK);
 		minusButton = new JButton("-");
 		minusButton.setHorizontalAlignment(SwingConstants.CENTER);
         minusButton.addActionListener(this);
 		//minusButton.setForeground(Color.WHITE);
-		//minusButton.setBackground(Color.BLUE);
+		//minusButton.setBackground(Color.BLACK);
 		multiplyButton = new JButton("*");
 		multiplyButton.setHorizontalAlignment(SwingConstants.CENTER);
         multiplyButton.addActionListener(this);
 		//multiplyButton.setForeground(Color.WHITE);
-		//multiplyButton.setBackground(Color.BLUE);
+		//multiplyButton.setBackground(Color.BLACK);
 		divideButton = new JButton("/");
 		divideButton.setHorizontalAlignment(SwingConstants.CENTER);
         divideButton.addActionListener(this);
 		//divideButton.setForeground(Color.WHITE);
-		//divideButton.setBackground(Color.BLUE);
+		//divideButton.setBackground(Color.BLACK);
 		equalsButton = new JButton("=");
 		equalsButton.setHorizontalAlignment(SwingConstants.CENTER);
         equalsButton.addActionListener(this);
 		//equalsButton.setForeground(Color.WHITE);
-		//equalsButton.setBackground(Color.BLUE);
+		//equalsButton.setBackground(Color.BLACK);
 		operationPanel = new JPanel();
 		operationPanel.setLayout(new GridLayout (5,1));
 		operationPanel.add(plusButton);
@@ -182,7 +194,7 @@ public class GUI extends JFrame implements ActionListener {
                 outputField.setText(outputField.getText().substring(0, outputField.getText().length() - 1));
             }
         } else if (e.getSource() == offButton) {
-		    // Do stuff here.
+		    System.exit(0);
         }
 	}
 

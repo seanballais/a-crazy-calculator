@@ -80,7 +80,8 @@ public class App extends Observer
     {
         App app = new App();
         app.getGUI().setVisible(true);
-        app.getGUI().setSize(500,400);
+        app.getGUI().setSize(300,400);
         app.getGUI().setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        app.getGUI().setResizable(false);
     }
 }
