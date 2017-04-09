@@ -61,6 +61,7 @@ public class App extends Observer
         if (this.isExpressionValid) {
             this.gui.setOutputField(this.evaluator.compute());
         }
+        this.isExpressionValid = true;
     }
 
     private void printObjects(Object[] contents)
@@ -83,5 +84,6 @@ public class App extends Observer
         app.getGUI().setSize(300,400);
         app.getGUI().setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         app.getGUI().setResizable(false);
+        app.getGUI().setLocationRelativeTo(null);
     }
 }
