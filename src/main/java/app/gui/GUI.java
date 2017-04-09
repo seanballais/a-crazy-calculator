@@ -17,19 +17,18 @@ public class GUI extends JFrame implements ActionListener {
 	private JButton deleteButton;
 	private JButton offButton;
 
-	private JTextArea outputField;
+	private JTextField outputField;
 
 	private JButton[] numberButtons;
 
 	private JPanel numPanel;
-	private JPanel operationPanel;
 	private JPanel mainPanel;
 	private JPanel outPanel;
-	private JPanel table;
 
 	private App appRef;
 
 	public GUI (App app) {
+	    super("Crazy Calculator");
 	    this.appRef = app;
 		numberButtons= new JButton[12];
 		setLayout(new BorderLayout());
@@ -104,12 +103,11 @@ public class GUI extends JFrame implements ActionListener {
 		equalsButton.setForeground(Color.WHITE);
 		equalsButton.setBackground(Color.BLACK);
 		
-		outputField = new JTextArea();
+		outputField = new JTextField();
 		outputField.setLayout(new FlowLayout());
-		//outputField.setHorizontalAlignment(JTextField.RIGHT);
-		outputField.setPreferredSize(new Dimension(251,105));
-		//outputField.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-		outputField.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+		outputField.setHorizontalAlignment(JTextField.RIGHT);
+		outputField.setPreferredSize(new Dimension(295,95));
+		outputField.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		outputField.setOpaque(false);
 		outputField.setBackground(new Color(0,0,0,0));
 		outputField.setEditable(false);
@@ -149,18 +147,7 @@ public class GUI extends JFrame implements ActionListener {
 		numPanel.add(numberButtons[11]);
 		numPanel.add(equalsButton);
 		mainPanel.add(numPanel);
-		
-		
-		/*operationPanel = new JPanel();
-		operationPanel.setLayout(new GridLayout (5,1));
-		operationPanel.add(plusButton);
-		operationPanel.add(minusButton);
-		operationPanel.add(multiplyButton);
-		operationPanel.add(divideButton);
-		operationPanel.add(equalsButton);
-		mainPanel.add(operationPanel, BorderLayout.EAST);*/
-		
-		//add(operationPanel, BorderLayout.EAST);
+
 		add(mainPanel, BorderLayout.CENTER);
 	}
 
