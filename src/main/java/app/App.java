@@ -1,9 +1,7 @@
 package app;
 
-import app.gui.ContentDialog;
 import app.gui.GUI;
 import app.processor.Evaluator;
-import app.processor.StringValidator;
 import app.utils.patterns.Observer;
 
 import javax.swing.*;
@@ -16,7 +14,7 @@ public class App extends Observer
     private Evaluator evaluator;
     private GUI gui;
     private boolean isExpressionValid;
-    private ContentDialog dsContentDialog;
+    private ContentDialogThread dialogThread;
 
     public App()
     {
@@ -26,7 +24,6 @@ public class App extends Observer
         this.gui = new GUI(this);
         this.evaluator.registerObserver(this);
         this.isExpressionValid = true;
-        this.dsContentDialog = new ContentDialog();
     }
 
     public GUI getGUI()
@@ -46,7 +43,6 @@ public class App extends Observer
         };
 
         this.populateTable(dsTableModel, stackContents);
-        this.dsContentDialog.updateContents(dsTableModel);
     }
 
     public void alertParseError(String error)
@@ -57,8 +53,6 @@ public class App extends Observer
 
     public void startComputing(String expression)
     {
-        this.dsContentDialog.setVisible(true);
-
         this.evaluator.setExpression(expression);
         if (this.isExpressionValid) {
             this.gui.setOutputField(this.evaluator.compute());
