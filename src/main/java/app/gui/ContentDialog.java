@@ -3,6 +3,8 @@ package app.gui;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.LinkedList;
@@ -12,6 +14,7 @@ public class ContentDialog extends JDialog
 {
     private Queue<DefaultTableModel> tableModels;
     private JTable dsContents;
+    private Timer updateTimer;
 
     public ContentDialog()
     {
@@ -24,23 +27,20 @@ public class ContentDialog extends JDialog
         this.setModalityType(ModalityType.APPLICATION_MODAL);
         this.pack();
         this.setTitle("Data Structure Contents");
-
-        this.addWindowListener(new WindowAdapter() {
+        this.updateTimer = new Timer(1000, new ActionListener() {
             @Override
-            public void windowOpened(WindowEvent e) {
-                super.windowOpened(e);
-
-                while (!tableModels.isEmpty()) {
+            public void actionPerformed(ActionEvent e) {
+                if (!tableModels.isEmpty()) {
                     dsContents.setModel(tableModels.remove());
                 }
             }
         });
+
+        this.updateTimer.start();
     }
 
     public void addContents(DefaultTableModel contents)
     {
-        for (int i = 0; i < 50; i++) {
-            this.tableModels.add(contents);
-        }
+        this.tableModels.add(contents);
     }
 }
