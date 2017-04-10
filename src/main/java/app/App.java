@@ -1,5 +1,6 @@
 package app;
 
+import app.gui.ContentDialog;
 import app.gui.GUI;
 import app.processor.Evaluator;
 import app.utils.patterns.Observer;
@@ -14,12 +15,13 @@ public class App extends Observer
     private Evaluator evaluator;
     private GUI gui;
     private boolean isExpressionValid;
-    private ContentDialogThread dialogThread;
+    private ContentDialog contentDialog;
 
     public App()
     {
         super();
 
+        this.contentDialog = new ContentDialog();
         this.evaluator = new Evaluator();
         this.gui = new GUI(this);
         this.evaluator.registerObserver(this);
@@ -43,6 +45,7 @@ public class App extends Observer
         };
 
         this.populateTable(dsTableModel, stackContents);
+        this.contentDialog.addContents(dsTableModel);
     }
 
     public void alertParseError(String error)
@@ -56,7 +59,10 @@ public class App extends Observer
         this.evaluator.setExpression(expression);
         if (this.isExpressionValid) {
             this.gui.setOutputField(this.evaluator.compute());
+            this.contentDialog.setVisible(true);
+            this.contentDialog.runAnimation();
         }
+
         this.isExpressionValid = true;
     }
 
