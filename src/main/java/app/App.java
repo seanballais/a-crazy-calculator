@@ -57,6 +57,7 @@ public class App extends Observer
         if (this.isExpressionValid) {
             this.gui.setOutputField(this.evaluator.compute());
         }
+        this.isExpressionValid = true;
     }
 
     private void populateTable(DefaultTableModel dsTableModel, HashMap<String, Object[]> stackContents)
