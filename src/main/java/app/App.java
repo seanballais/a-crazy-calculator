@@ -60,7 +60,6 @@ public class App extends Observer
         if (this.isExpressionValid) {
             this.gui.setOutputField(this.evaluator.compute());
             this.contentDialog.setVisible(true);
-            this.contentDialog.runAnimation();
         }
 
         this.isExpressionValid = true;

@@ -3,6 +3,8 @@ package app.gui;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -22,15 +24,23 @@ public class ContentDialog extends JDialog
         this.setModalityType(ModalityType.APPLICATION_MODAL);
         this.pack();
         this.setTitle("Data Structure Contents");
+
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+                super.windowOpened(e);
+
+                while (!tableModels.isEmpty()) {
+                    dsContents.setModel(tableModels.remove());
+                }
+            }
+        });
     }
 
     public void addContents(DefaultTableModel contents)
     {
-        this.tableModels.add(contents);
-    }
-
-    public void runAnimation()
-    {
-        // Run animation.
+        for (int i = 0; i < 50; i++) {
+            this.tableModels.add(contents);
+        }
     }
 }
