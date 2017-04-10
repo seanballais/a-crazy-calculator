@@ -6,6 +6,7 @@ import app.processor.StringValidator;
 import app.utils.patterns.Observer;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.util.HashMap;
 
 public class App extends Observer
@@ -46,6 +47,17 @@ public class App extends Observer
         this.printObjects(stackContents.get("linkedlist1"));
         System.out.print("Linked List 2 contents: ");
         this.printObjects(stackContents.get("linkedlist2"));
+
+        String[] columnNames = {
+            "Stack", "Queue 1", "Queue 2", "Pseudo Array 1", "PseudoArray 2", "Linked List 1", "Linked List 2"
+        };
+        DefaultTableModel dsTableModel = new DefaultTableModel(columnNames, 0) {
+            @Override public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        this.populateTable(dsTableModel, stackContents);
     }
 
     public void alertParseError(String error)
@@ -61,6 +73,11 @@ public class App extends Observer
         if (this.isExpressionValid) {
             this.gui.setOutputField(this.evaluator.compute());
         }
+    }
+
+    private void populateTable(DefaultTableModel dsTableModel, HashMap<String, Object[]> stackContents)
+    {
+        for ()
     }
 
     private void printObjects(Object[] contents)

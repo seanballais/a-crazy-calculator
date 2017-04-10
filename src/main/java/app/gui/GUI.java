@@ -25,7 +25,6 @@ public class GUI extends JFrame implements ActionListener {
 	private JPanel operationPanel;
 	private JPanel mainPanel;
 	private JPanel outPanel;
-	private JPanel table;
 
 	private App appRef;
 
