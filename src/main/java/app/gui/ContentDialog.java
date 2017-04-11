@@ -24,9 +24,10 @@ public class ContentDialog extends JDialog
         this.setLayout(new BorderLayout());
         this.add(new JScrollPane(dsContents, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED), BorderLayout.CENTER);
         this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        this.setModalityType(ModalityType.APPLICATION_MODAL);
+        this.setModalityType(ModalityType.MODELESS);
         this.pack();
         this.setTitle("Data Structure Contents");
+        this.setVisible(true);
         this.updateTimer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

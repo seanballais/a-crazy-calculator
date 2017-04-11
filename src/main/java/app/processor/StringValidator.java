@@ -52,6 +52,8 @@ public class StringValidator
                         subexpression.setLength(0);
                         prevOperator = '\0';
                         addSubexpression = false;
+                        currChar++;
+                        continue;
                     }
                 }
 

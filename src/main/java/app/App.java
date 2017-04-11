@@ -59,7 +59,6 @@ public class App extends Observer
         this.evaluator.setExpression(expression);
         if (this.isExpressionValid) {
             this.gui.setOutputField(this.evaluator.compute());
-            this.contentDialog.setVisible(true);
         }
 
         this.isExpressionValid = true;
