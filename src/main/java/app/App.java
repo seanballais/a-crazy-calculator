@@ -1,11 +1,13 @@
 package app;
 
+import app.gui.ContentDialog;
 import app.gui.GUI;
 import app.processor.Evaluator;
-import app.processor.StringValidator;
 import app.utils.patterns.Observer;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class App extends Observer
@@ -13,11 +15,13 @@ public class App extends Observer
     private Evaluator evaluator;
     private GUI gui;
     private boolean isExpressionValid;
+    private ContentDialog contentDialog;
 
     public App()
     {
         super();
 
+        this.contentDialog = new ContentDialog();
         this.evaluator = new Evaluator();
         this.gui = new GUI(this);
         this.evaluator.registerObserver(this);
@@ -31,21 +35,17 @@ public class App extends Observer
 
     public void update(HashMap<String, Object[]> stackContents)
     {
-        System.out.println("===");
-        System.out.print("Stack contents: ");
-        this.printObjects(stackContents.get("stack"));
-        System.out.print("Queue 1 contents: ");
-        this.printObjects(stackContents.get("queue1"));
-        System.out.print("Queue 2 contents: ");
-        this.printObjects(stackContents.get("queue2"));
-        System.out.print("Pseudo Array 1 contents: ");
-        this.printObjects(stackContents.get("pseudoarray1"));
-        System.out.print("Pseudo Array 2 contents: ");
-        this.printObjects(stackContents.get("pseudoarray2"));
-        System.out.print("Linked List 1 contents: ");
-        this.printObjects(stackContents.get("linkedlist1"));
-        System.out.print("Linked List 2 contents: ");
-        this.printObjects(stackContents.get("linkedlist2"));
+        String[] columnNames = {
+            "Stack", "Queue 1", "Queue 2", "Pseudo Array 1", "PseudoArray 2", "Linked List 1", "Linked List 2"
+        };
+        DefaultTableModel dsTableModel = new DefaultTableModel(columnNames, 0) {
+            @Override public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        this.populateTable(dsTableModel, stackContents);
+        this.contentDialog.addContents(dsTableModel);
     }
 
     public void alertParseError(String error)
@@ -57,24 +57,90 @@ public class App extends Observer
     public void startComputing(String expression)
     {
         this.evaluator.setExpression(expression);
-
         if (this.isExpressionValid) {
             this.gui.setOutputField(this.evaluator.compute());
         }
+
         this.isExpressionValid = true;
     }
 
-    private void printObjects(Object[] contents)
+    private void populateTable(DefaultTableModel dsTableModel, HashMap<String, Object[]> stackContents)
     {
-        for (int i = 0; i < contents.length; i++) {
-            System.out.print(contents[i]);
+        Object[] stackItems = stackContents.get("stack");
+        Object[] queue1Items = stackContents.get("queue1");
+        Object[] queue2Items = stackContents.get("queue2");
+        Object[] pseudoarray1Items = stackContents.get("pseudoarray1");
+        Object[] pseudoarray2Items = stackContents.get("pseudoarray2");
+        Object[] linkedlist1Items = stackContents.get("linkedlist1");
+        Object[] linkedlist2Items = stackContents.get("linkedlist2");
 
-            if (i < contents.length - 1) {
-                System.out.print(' ');
+        int numRows = Math.max(
+            Math.max(
+                stackItems.length,
+                Math.max(
+                    queue1Items.length,
+                    queue2Items.length
+                )
+            ),
+            Math.max(
+                Math.max(
+                    pseudoarray1Items.length,
+                    pseudoarray2Items.length
+                ),
+                Math.max(
+                    linkedlist1Items.length,
+                    linkedlist2Items.length
+                )
+            )
+        );
+
+        ArrayList<Object> rowData = new ArrayList<>();
+        for (int i = 0; i < numRows; i++) {
+            if (i < stackItems.length) {
+                rowData.add(stackItems[i]);
+            } else {
+                rowData.add("");
             }
-        }
 
-        System.out.println("");
+            if (i < queue1Items.length) {
+                rowData.add(queue1Items[i]);
+            } else {
+                rowData.add("");
+            }
+
+            if (i < queue2Items.length) {
+                rowData.add(queue2Items[i]);
+            } else {
+                rowData.add("");
+            }
+
+            if (i < pseudoarray1Items.length) {
+                rowData.add(pseudoarray1Items[i]);
+            } else {
+                rowData.add("");
+            }
+
+            if (i < pseudoarray2Items.length) {
+                rowData.add(pseudoarray2Items[i]);
+            } else {
+                rowData.add("");
+            }
+
+            if (i < linkedlist1Items.length) {
+                rowData.add(linkedlist1Items[i]);
+            } else {
+                rowData.add("");
+            }
+
+            if (i < linkedlist2Items.length) {
+                rowData.add(linkedlist2Items[i]);
+            } else {
+                rowData.add("");
+            }
+
+            dsTableModel.addRow(rowData.toArray());
+            rowData.clear();
+        }
     }
 
     public static void main(String[] args)
