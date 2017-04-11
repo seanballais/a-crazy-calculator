@@ -1,81 +1,155 @@
 package app;
 
+import app.gui.ContentDialog;
+import app.gui.GUI;
 import app.processor.Evaluator;
 import app.utils.patterns.Observer;
 
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Scanner;
 
 public class App extends Observer
 {
     private Evaluator evaluator;
+    private GUI gui;
+    private boolean isExpressionValid;
+    private ContentDialog contentDialog;
 
     public App()
     {
         super();
 
+        this.contentDialog = new ContentDialog();
         this.evaluator = new Evaluator();
+        this.gui = new GUI(this);
         this.evaluator.registerObserver(this);
+        this.isExpressionValid = true;
+    }
+
+    public GUI getGUI()
+    {
+        return this.gui;
     }
 
     public void update(HashMap<String, Object[]> stackContents)
     {
-        System.out.println("===");
-        System.out.print("Stack contents: ");
-        this.printObjects(stackContents.get("stack"));
-        System.out.print("Queue 1 contents: ");
-        this.printObjects(stackContents.get("queue1"));
-        System.out.print("Queue 2 contents: ");
-        this.printObjects(stackContents.get("queue2"));
-        System.out.print("Pseudo Array 1 contents: ");
-        this.printObjects(stackContents.get("pseudoarray1"));
-        System.out.print("Pseudo Array 2 contents: ");
-        this.printObjects(stackContents.get("pseudoarray2"));
-        System.out.print("Linked List 1 contents: ");
-        this.printObjects(stackContents.get("linkedlist1"));
-        System.out.print("Linked List 2 contents: ");
-        this.printObjects(stackContents.get("linkedlist2"));
+        String[] columnNames = {
+            "Stack", "Queue 1", "Queue 2", "Pseudo Array 1", "PseudoArray 2", "Linked List 1", "Linked List 2"
+        };
+        DefaultTableModel dsTableModel = new DefaultTableModel(columnNames, 0) {
+            @Override public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        this.populateTable(dsTableModel, stackContents);
+        this.contentDialog.addContents(dsTableModel);
     }
 
     public void alertParseError(String error)
     {
-        System.out.println(error);
-        System.exit(-1);
+        this.isExpressionValid = false;
+        JOptionPane.showMessageDialog(this.gui, error, "Calculator Error", JOptionPane.ERROR_MESSAGE);
     }
 
-    public Evaluator getEvaluator()
+    public void startComputing(String expression)
     {
-        return this.evaluator;
-    }
-
-    private void printObjects(Object[] contents)
-    {
-        for (int i = 0; i < contents.length; i++) {
-            System.out.print(contents[i]);
-
-            if (i < contents.length - 1) {
-                System.out.print(' ');
-            }
+        this.evaluator.setExpression(expression);
+        if (this.isExpressionValid) {
+            this.gui.setOutputField(this.evaluator.compute());
         }
 
-        System.out.println("");
+        this.isExpressionValid = true;
+    }
+
+    private void populateTable(DefaultTableModel dsTableModel, HashMap<String, Object[]> stackContents)
+    {
+        Object[] stackItems = stackContents.get("stack");
+        Object[] queue1Items = stackContents.get("queue1");
+        Object[] queue2Items = stackContents.get("queue2");
+        Object[] pseudoarray1Items = stackContents.get("pseudoarray1");
+        Object[] pseudoarray2Items = stackContents.get("pseudoarray2");
+        Object[] linkedlist1Items = stackContents.get("linkedlist1");
+        Object[] linkedlist2Items = stackContents.get("linkedlist2");
+
+        int numRows = Math.max(
+            Math.max(
+                stackItems.length,
+                Math.max(
+                    queue1Items.length,
+                    queue2Items.length
+                )
+            ),
+            Math.max(
+                Math.max(
+                    pseudoarray1Items.length,
+                    pseudoarray2Items.length
+                ),
+                Math.max(
+                    linkedlist1Items.length,
+                    linkedlist2Items.length
+                )
+            )
+        );
+
+        ArrayList<Object> rowData = new ArrayList<>();
+        for (int i = 0; i < numRows; i++) {
+            if (i < stackItems.length) {
+                rowData.add(stackItems[i]);
+            } else {
+                rowData.add("");
+            }
+
+            if (i < queue1Items.length) {
+                rowData.add(queue1Items[i]);
+            } else {
+                rowData.add("");
+            }
+
+            if (i < queue2Items.length) {
+                rowData.add(queue2Items[i]);
+            } else {
+                rowData.add("");
+            }
+
+            if (i < pseudoarray1Items.length) {
+                rowData.add(pseudoarray1Items[i]);
+            } else {
+                rowData.add("");
+            }
+
+            if (i < pseudoarray2Items.length) {
+                rowData.add(pseudoarray2Items[i]);
+            } else {
+                rowData.add("");
+            }
+
+            if (i < linkedlist1Items.length) {
+                rowData.add(linkedlist1Items[i]);
+            } else {
+                rowData.add("");
+            }
+
+            if (i < linkedlist2Items.length) {
+                rowData.add(linkedlist2Items[i]);
+            } else {
+                rowData.add("");
+            }
+
+            dsTableModel.addRow(rowData.toArray());
+            rowData.clear();
+        }
     }
 
     public static void main(String[] args)
     {
         App app = new App();
-
-        Scanner scan = new Scanner(System.in);
-
-        System.out.print("Expression: ");
-
-        app.getEvaluator().setExpression(scan.nextLine());
-
-        System.out.println("\nData Structure Contents");
-
-        String value = app.getEvaluator().compute();
-        System.out.println("Postfix String: " + app.getEvaluator().getPostFixExpression());
-        System.out.println("\n-----");
-        System.out.println("Computed Value: " + value);
+        app.getGUI().setVisible(true);
+        app.getGUI().setSize(300,400);
+        app.getGUI().setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        app.getGUI().setResizable(false);
+        app.getGUI().setLocationRelativeTo(null);
     }
 }
