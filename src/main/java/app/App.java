@@ -59,6 +59,7 @@ public class App extends Observer
         this.evaluator.setExpression(expression);
         if (this.isExpressionValid) {
             this.gui.setOutputField(this.evaluator.compute());
+            this.gui.setPostfixField(this.evaluator.getPostFixExpression());
         }
 
         this.isExpressionValid = true;

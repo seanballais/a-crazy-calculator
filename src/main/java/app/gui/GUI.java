@@ -16,11 +16,13 @@ public class GUI extends JFrame implements ActionListener {
 	private JButton clearButton;
 	private JButton deleteButton;
 	private JButton offButton;
-
-	private JTextField outputField;
-
 	private JButton[] numberButtons;
 
+	private JTextField outputField;
+	private JTextField postfixField;
+
+	private JLabel postfixLabel = new JLabel("POSTFIX EXPRESSION", SwingConstants.CENTER);
+	
 	private JPanel numPanel;
 	private JPanel mainPanel;
 	private JPanel outPanel;
@@ -33,7 +35,7 @@ public class GUI extends JFrame implements ActionListener {
 		numberButtons= new JButton[12];
 		setLayout(new BorderLayout());
 		//mainPanel.setLayout(new BorderLayout());
-		Font font = new Font("Verdana", Font.BOLD, 14);
+		Font font = new Font("Verdana", Font.PLAIN, 14);
 		
 		for(int i=9; i>=0;i--){
 			numberButtons[i] = new JButton(Integer.toString(i));
@@ -104,7 +106,6 @@ public class GUI extends JFrame implements ActionListener {
 		equalsButton.setBackground(Color.BLACK);
 		
 		outputField = new JTextField();
-		outputField.setLayout(new FlowLayout());
 		outputField.setHorizontalAlignment(JTextField.RIGHT);
 		outputField.setPreferredSize(new Dimension(295,95));
 		outputField.setBorder(javax.swing.BorderFactory.createEmptyBorder());
@@ -113,9 +114,25 @@ public class GUI extends JFrame implements ActionListener {
 		outputField.setEditable(false);
 		outputField.setFont(font);
 		outPanel = new JPanel();
+		outPanel.setLayout(new GridLayout(3,1));
 		outPanel.setPreferredSize(new Dimension(50,100));
 		//outPanel.setBackground(Color.BLACK);
+		
+		postfixField = new JTextField("POSTFIX EXPRESSION HERE");
+		//postfixField.setPreferredSize(new Dimension(290,95));
+		postfixField.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		postfixField.setHorizontalAlignment(JTextField.RIGHT);
+		postfixField.setOpaque(false);
+		postfixField.setBackground(new Color(0,0,0,0));
+		postfixField.setEditable(false);
+		postfixField.setFont(font);
+		postfixField.setVisible(false);
+		postfixLabel.setVisible(false);
 		outPanel.add(outputField);
+		outPanel.add(postfixLabel);
+		outPanel.add(postfixField);
+
+
 
 		mainPanel = new JPanel();
 		mainPanel.setLayout(new BorderLayout());
@@ -124,7 +141,7 @@ public class GUI extends JFrame implements ActionListener {
 		numPanel = new JPanel();
 		numPanel.setLayout(new GridLayout(5,4));
 		numPanel.setBackground(Color.BLACK);
-		//numPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+		//numPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE));
 		
 		numPanel.add(clearButton);
 		numPanel.add(deleteButton);
@@ -171,6 +188,8 @@ public class GUI extends JFrame implements ActionListener {
         } else if (e.getSource() == equalsButton) {
 		    if (!this.outputField.getText().equals("")) {
                 this.appRef.startComputing(this.outputField.getText());
+                postfixLabel.setVisible(true);
+                postfixField.setVisible(true);
             }
         } else if (e.getSource() == clearButton) {
             outputField.setText("");
@@ -187,4 +206,5 @@ public class GUI extends JFrame implements ActionListener {
     {
         this.outputField.setText(text);
     }
+    public void setPostfixField(String text) { this.postfixField.setText(text); }
 }
