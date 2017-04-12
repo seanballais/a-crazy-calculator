@@ -71,17 +71,22 @@ public class Evaluator
                 double firstOperand = Double.parseDouble(this.stack.pop());
                 if (symbol.equals("+")) {
                     this.stack.push(Double.toString(firstOperand + secondOperand));
+                    this.notify(this.stack.getDSContents());
                 } else if (symbol.equals("-")) {
                     this.stack.push(Double.toString(firstOperand - secondOperand));
+                    this.notify(this.stack.getDSContents());
                 } else if (symbol.equals("*")) {
                     this.stack.push(Double.toString(firstOperand * secondOperand));
+                    this.notify(this.stack.getDSContents());
                 } else if (symbol.equals("/")) {
                     this.stack.push(Double.toString(firstOperand / secondOperand));
+                    this.notify(this.stack.getDSContents());
                 }
             }
         }
 
         String result = this.stack.pop();
+        this.notify(this.stack.getDSContents());
         String[] explodedNumber = result.split("\\.");
 
         if (explodedNumber.length > 1 && this.hasNonZeros(explodedNumber[1])) {

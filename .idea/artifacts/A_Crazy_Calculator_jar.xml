@@ -1,0 +1,11 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="A Crazy Calculator:jar">
+    <output-path>$PROJECT_DIR$/jar/</output-path>
+    <root id="archive" name="A Crazy Calculator.jar">
+      <element id="module-output" name="A_Crazy_Calculator_main" />
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/src/main/java/META-INF/MANIFEST.MF" />
+      </element>
+    </root>
+  </artifact>
+</component>
