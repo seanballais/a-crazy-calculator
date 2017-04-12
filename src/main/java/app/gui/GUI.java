@@ -206,4 +206,5 @@ public class GUI extends JFrame implements ActionListener {
     {
         this.outputField.setText(text);
     }
+    public void setPostfixField(String text) { this.postfixField.setText(text); }
 }
